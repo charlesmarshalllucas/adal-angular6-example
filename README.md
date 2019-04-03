@@ -101,28 +101,38 @@ const routes: Routes = [
 8. Install adal-angular4:
 
 ```
-npm install --save adal-angular4
+npm install adal-angular4
 ```
 
 9. Import Adal Components into app.module.ts:
 
 ```typescript
 ...
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
 ...
-providers: [
-...
-  AdalService,
-  AdalGuard,
-  { provide: HTTP_INTERCEPTORS, useClass: AdalInterceptor, multi: true }],
+  providers: [
+    ...
+    AdalService,
+    AdalGuard,
+    { provide: HTTP_INTERCEPTORS, useClass: AdalInterceptor, multi: true }
+    ...
+  ],
 ...
 ```
 
-10. Set Up AdalGuard on HomeComponent Path in app-routing.module.ts:
+10. Import and set up AdalGuard on HomeComponent Path in app-routing.module.ts:
 
 ```typescript
 ...
-{ path: '', component: HomeComponent, canActivate: [AdalGuard] },
+import { AdalGuard } from 'adal-angular4';
+...
+...
+const routes: Routes = [
+  ...
+  { path: '', component: HomeComponent, canActivate: [AdalGuard] },
+  ...
+];
 ...
 ```
 
@@ -162,7 +172,7 @@ export class AppComponent {
 ...
 ```
 
-13. Create Login in toolbar-component.ts:
+13. Replace contents of toolbar.component.html:
 
 ```html
 <mat-toolbar color="primary">
@@ -180,6 +190,8 @@ export class AppComponent {
 </mat-toolbar>
 ```
 
+14. Create Login in toolbar.component.ts:
+
 ```typescript
 import { Component, OnInit } from '@angular/core';
 import { AdalService } from 'adal-angular4';
@@ -194,7 +206,6 @@ export class ToolbarComponent implements OnInit {
   constructor(private adalService: AdalService) { }
 
   ngOnInit() {
-
     this.adalService.handleWindowCallback();
 
     console.log(this.adalService.userInfo);
@@ -214,11 +225,11 @@ export class ToolbarComponent implements OnInit {
 }
 ```
 
-14. Add ToolbarComponent to app.component.html:
+15. Add ToolbarComponent to app.component.html:
 
 ```html
 <app-toolbar></app-toolbar>
 <router-outlet></router-outlet>
 ```
 
-15. Done!
+16. Done!
